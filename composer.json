@@ -1,5 +1,5 @@
 {
-    "name": "confident",
+    "name": "confident/confident",
     "description": "api mapping and mysql conector",
     "type": "library",
     "authors": [
