@@ -1,0 +1,17 @@
+{
+    "name": "confident",
+    "description": "api mapping and mysql conector",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Walter Corrales",
+            "email": "corraleswalter@live.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Confident\\": "confident"
+        }
+    },
+    "require": {}
+}
