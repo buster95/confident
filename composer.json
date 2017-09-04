@@ -2,6 +2,7 @@
     "name": "confident/confident",
     "description": "api mapping and mysql conector",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Walter Corrales",
