@@ -21,7 +21,8 @@ class Table
     private $where = '';
     private $order = '';
     private $group = '';
-    private $limit = '';
+    private $limit = 0;
+    private $page = 0;
     private $inner = '';
     private $mydb;
 
@@ -506,10 +507,11 @@ class Table
      * @param  integer $cantidad CANTIDAD DE DATOS
      * @return Table            RETURN CURRENT CLASS
      */
-    public function limit($cantidad = 1000)
+    public function limit($cantidad = 1000, $page = 1)
     {
         if (is_numeric($cantidad)) {
             $this->limit = $cantidad;
+            $this->page = $cantidad * ($page - 1);
         }
         return $this;
     }
@@ -639,8 +641,8 @@ class Table
         if ($this->order != '') {
             $consulta.=" ORDER BY " . $this->order;
         }
-        if ($this->limit != '') {
-            $consulta.=" LIMIT " . $this->limit;
+        if ($this->limit > 0) {
+            $consulta.=" LIMIT " . $this->page . ', ' . $this->limit;
         }
         return $consulta;
     }
