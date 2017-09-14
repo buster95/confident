@@ -95,9 +95,7 @@ class ApiController
                     if ($routeMethod===CURRENT_METHOD) {
                         $route->execute();
                         return;
-                    }
-                    
-                    if (!$existePath) {
+                    } elseif (!$existePath) {
                         $this->MethodNotSupported();
                         return;
                     }
@@ -106,17 +104,22 @@ class ApiController
                 if (CURRENT_PATH===$routeUrl && CURRENT_METHOD===$routeMethod) {
                     $route->execute();
                     return;
-                } elseif (CURRENT_PATH===$routeUrl && CURRENT_METHOD!==$routeMethod) {
-                    if (CURRENT_PATH==='/') {
-                        $route->execute();
-                        return;
-                    }
-                    
-                    if (!$existePath) {
-                        $this->MethodNotSupported();
-                        return;
-                    }
+                } elseif (!$existePath) {
+                    $this->MethodNotSupported();
+                    return;
                 }
+                
+                // elseif (CURRENT_PATH===$routeUrl && CURRENT_METHOD!==$routeMethod) {
+                //     if (CURRENT_PATH==='/') {
+                //         $route->execute();
+                //         return;
+                //     }
+                    
+                //     if (!$existePath) {
+                //         $this->MethodNotSupported();
+                //         return;
+                //     }
+                // }
             }
         }
         $this->NotFound();
