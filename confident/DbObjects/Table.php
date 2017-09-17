@@ -379,7 +379,11 @@ class Table
                 $this->where .= $operador.$valor;
             }
         } elseif ($tipo === 'STRING' && (is_string($valor) && $valor !== 0)) {
-            $this->where .= " LIKE '" . $valor . "'";
+            if ($operador==='') {
+                $this->where .= " LIKE '" . $valor . "'";
+            } else {
+                $this->where .= $operador . "'".$valor."'";
+            }
         } elseif ($tipo==='BOOLEAN') {
             $this->where .= "=".$valor;
         } elseif ($tipo==='DATE') {
