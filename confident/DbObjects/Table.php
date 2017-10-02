@@ -110,8 +110,8 @@ class Table
         $parameter=$this->SELECT_CLEAN_PARAMS($columna);
         $columnas = $this->mydb->consultar('SHOW COLUMNS FROM ' . $this->tabla . " WHERE Field='" .$parameter. "'");
 
-        $number = array('bigint', 'int', 'smallint', 'mediumint', 'real', 'float', 'double', 'decimal');
-        $string = array('varchar', 'nvarchar', 'char', 'text', 'tinytext', 'mediumtext', 'longtext','enum');
+        $number = array('bigint', 'int', 'smallint', 'mediumint', 'real', 'float', 'double', 'decimal', 'enum');
+        $string = array('varchar', 'nvarchar', 'char', 'text', 'tinytext', 'mediumtext', 'longtext','enum\'');
         $date = array('date', 'time', 'datetime', 'timestamp', 'year');
         $booleano = array('tinyint');
         $binario = array('binary', 'tinyblob', 'blob', 'mediumblob', 'bigblob', 'longblob', 'varbinary');
@@ -123,10 +123,10 @@ class Table
             $tipo = strtolower($fila['Type']);
             $tipo = str_replace($filter_type, '', $tipo);
 
-            if ($this->search_array($number, $tipo)) {
-                return "NUMBER";
-            } elseif ($this->search_array($string, $tipo)) {
+            if ($this->search_array($string, $tipo)) {
                 return "STRING";
+            } elseif ($this->search_array($number, $tipo)) {
+                return "NUMBER";
             } elseif ($this->search_array($date, $tipo)) {
                 return "DATE";
             } elseif ($this->search_array($booleano, $tipo)) {
@@ -847,7 +847,7 @@ class Table
     {
         if (is_array($array)) {
             foreach ($array as $key) {
-                if ($value == $key) {
+                if ($value == $key || strpos($value, $key) == 0) {
                     return true;
                 }
             }
