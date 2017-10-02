@@ -111,7 +111,7 @@ class Table
         $columnas = $this->mydb->consultar('SHOW COLUMNS FROM ' . $this->tabla . " WHERE Field='" .$parameter. "'");
 
         $number = array('bigint', 'int', 'smallint', 'mediumint', 'real', 'float', 'double', 'decimal');
-        $string = array('varchar', 'nvarchar', 'char', 'text', 'tinytext', 'mediumtext', 'longtext');
+        $string = array('varchar', 'nvarchar', 'char', 'text', 'tinytext', 'mediumtext', 'longtext','enum');
         $date = array('date', 'time', 'datetime', 'timestamp', 'year');
         $booleano = array('tinyint');
         $binario = array('binary', 'tinyblob', 'blob', 'mediumblob', 'bigblob', 'longblob', 'varbinary');
