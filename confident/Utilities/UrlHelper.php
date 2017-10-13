@@ -26,17 +26,16 @@ class UrlHelper
     public static function getUrl()
     {
         if (isset($_SERVER["PATH_INFO"])) {
-            return strtolower(explode('?', $_SERVER["PATH_INFO"])[0]);
+            if ($_SERVER["PATH_INFO"]!=='') {
+                return strtolower(explode('?', $_SERVER["PATH_INFO"])[0]);
+            }
         } elseif (isset($_SERVER['REQUEST_URI']) && isset($_SERVER['SCRIPT_NAME'])) {
-            $reqUri = $_SERVER['REQUEST_URI'];
-            $script = $_SERVER['SCRIPT_NAME'];
-
-            $scriptExplode = explode('/', $script);
-            $scriptName = strtolower($scriptExplode[sizeof($scriptExplode)-1]);
-            $scriptPath = str_replace('/'.$scriptName, '', $script);
-            
-            $reqUri = str_replace($scriptPath, '', $reqUri);
-            return $reqUri;
+            $script = strtolower($_SERVER['SCRIPT_NAME']);
+            $reqUri = strtolower(explode('?', $_SERVER['REQUEST_URI'])[0]);
+    
+            if ($script!==$reqUri) {
+                return str_replace($script, '', $reqUri);
+            }
         }
         return '/';
     }
