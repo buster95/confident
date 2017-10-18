@@ -2,6 +2,7 @@
 namespace Confident;
 
 use mysqli;
+use Exception;
 use Confident\Utilities\JsonHelper as JsonConvert;
 use Confident\DbObjects\Table;
 use Confident\DbObjects\View;
@@ -15,7 +16,8 @@ date_default_timezone_set('Etc/GMT'.zona_horaria);
 /**
  * ORM para Mysql
  */
-class DataBase {
+class DataBase
+{
     // VARIABLES DE CONFIGURACION
     private static $user = 'root'; // USUARIO de la BASE DE DATOS
     private static $password = '123456'; // PASSWORD del usuario de la BASE DE DATOS
@@ -23,35 +25,42 @@ class DataBase {
     private static $host = '127.0.0.1'; // IPv4 o HOST DE CONEXION
     private static $port = ''; // PUERTO DE CONEXION DEFAULT:3306
 
-    public static function table($nombre_tabla) {
+    public static function table($nombre_tabla)
+    {
         $tabla = new Table($nombre_tabla);
         return $tabla;
     }
 
-    public static function setUser($username){
+    public static function setUser($username)
+    {
         self::$user = $username;
     }
     
-    public static function setPassword($pwd){
+    public static function setPassword($pwd)
+    {
         self::$password = $pwd;
     }
     
-    public static function setDatabase($db){
+    public static function setDatabase($db)
+    {
         self::$database = $db;
     }
     
-    public static function setHost($host){
+    public static function setHost($host)
+    {
         self::$host = $host;
     }
     
-    public static function setPort($port){
+    public static function setPort($port)
+    {
         self::$port = $port;
     }
     
     /**
      * @return mysqli_connect Conexion MySQL
      */
-    private function conectar() {
+    private function conectar()
+    {
         $con = new mysqli($this->getHOST(), self::$user, self::$password, self::$database);
         if ($con->connect_error) {
             trigger_error('Database connection failed: ' . $con->connect_error, E_USER_ERROR);
@@ -60,7 +69,8 @@ class DataBase {
         }
     }
 
-    private function getHOST() {
+    private function getHOST()
+    {
         if (self::$port == '') {
             return self::$host;
         } else {
@@ -68,7 +78,8 @@ class DataBase {
         }
     }
 
-    public static function query($consulta) {
+    public static function query($consulta)
+    {
         if ($consulta != null & $consulta != '' & is_string($consulta)) {
             $query = new Query($consulta);
             return $query;
@@ -76,15 +87,17 @@ class DataBase {
         throw new Exception("Consulta No Aceptada", 1);
     }
 
-    public static function procedure($proc_name, $params=null) {
-        if($proc_name !== null && $proc_name !== '' && is_string($proc_name)){
+    public static function procedure($proc_name, $params = null)
+    {
+        if ($proc_name !== null && $proc_name !== '' && is_string($proc_name)) {
             $proc = new Procedure($proc_name, $params);
             return $proc;
         }
         throw new Exception("Procedimiento No Aceptado", 1);
     }
 
-    public static function view($viewName){
+    public static function view($viewName)
+    {
         if ($viewName != null & $viewName != '') {
             $vista = new View($viewName);
             return $vista;
@@ -92,10 +105,12 @@ class DataBase {
         throw new Exception("Consulta No aceptada", 1);
     }
 
-    public function restore() {
+    public function restore()
+    {
     }
 
-    public function backup() {
+    public function backup()
+    {
         $conexion = new DataBase();
         $backup = "------------------------------------------------------------------------\n";
         $backup .= "--                         CONFIDENT BACKUP                          \n";
@@ -184,10 +199,11 @@ class DataBase {
         return $create . $backup;
     }
 
-    public function consultar($consulta) {
+    public function consultar($consulta)
+    {
         $conx = $this->conectar();
         $resultado = $conx->query($consulta);
-        if($conx->errno !==0 ){
+        if ($conx->errno !==0) {
             http_response_code(400);
             $resultado = array('message' => "Database Error Number:" . $conx->errno . " :: " . $conx->error);
         }
@@ -195,7 +211,8 @@ class DataBase {
         return $resultado;
     }
 
-    public function ejecutar($consulta) {
+    public function ejecutar($consulta)
+    {
         $conx = $this->conectar();
         $conx->query($consulta);
         $affected_rows = $conx->affected_rows;
@@ -207,7 +224,8 @@ class DataBase {
     /*
       CONVIERTE LAS FILAS DE MYSQLI EN UN ARREGLO DE OBJETOS
      */
-    public static function listar($resultados) {
+    public static function listar($resultados)
+    {
         $datos = array();
         while ($fila = $resultados->fetch_object()) {
             $datos[] = $fila;
@@ -218,7 +236,8 @@ class DataBase {
     /*
       CUENTA LOS DATOS DE UN ARRAY
      */
-    public static function count_data($objetos) {
+    public static function count_data($objetos)
+    {
         if (is_array($objetos)) {
             $x = 0;
             foreach ($objetos as $obj) {
@@ -233,14 +252,16 @@ class DataBase {
     /*
       CUENTA EL NUMERO DE FILAS DE UN  MYSQLI_RESULT
      */
-    public static function count_rows($resultado) {
+    public static function count_rows($resultado)
+    {
         return mysqli_num_rows($resultado);
     }
 
     /*
       VERIFICA SI UN STRING TIENE UN TAMAÑO ESPECIFICO
      */
-    public static function size_string_verify($valor, $size) {
+    public static function size_string_verify($valor, $size)
+    {
         if (is_string($valor) && is_numeric($size)) {
             if (strlen($valor) >= $size) {
                 return true;
@@ -250,7 +271,7 @@ class DataBase {
         } else {
             if (!is_string($valor) && is_numeric($size)) {
                 throw new Exception("Value no es un string", 4);
-            } else if (is_string($valor) && !is_numeric($size)) {
+            } elseif (is_string($valor) && !is_numeric($size)) {
                 throw new Exception("Size no es un numero", 4);
             } else {
                 throw new Exception("Parametros Invalidos", 4);
@@ -261,9 +282,10 @@ class DataBase {
     /**
      * LIMPIA UNA CADENA SOLO QUITANDO APOSTROFE
      * @param String $cadena CADENA A LIMPIAR
-     * @return String 		 CADENA LIMPIADA
+     * @return String        CADENA LIMPIADA
      */
-    public static function SQL_CLEAN_TEXT($cadena = '') {
+    public static function SQL_CLEAN_TEXT($cadena = '')
+    {
         $caracteres = array('\'');
         $filtrada = str_replace($caracteres, '', $cadena);
         return $filtrada;
@@ -274,7 +296,8 @@ class DataBase {
      * @param  String $cadena CADENA A LIMPIAR
      * @return String         CADENA LIMPIADA
      */
-    public static function SQL_CLEAN($cadena) {
+    public static function SQL_CLEAN($cadena)
+    {
         $caracteres = array('\'', '"', '=', '!',
             '<', '>', '¿', '?', '¡', '$', '\\', '{',
             '}', '[', ']', '#', '&',
@@ -284,7 +307,8 @@ class DataBase {
         return $filtrada;
     }
 
-    public static function SQL_CLEAN_SPECIAL($cadena) {
+    public static function SQL_CLEAN_SPECIAL($cadena)
+    {
         $caracteres = array('\'', '"', '=', '!',
             '<', '>', '¿', '?', '¡', '$', '\\', '{',
             '}', '[', ']', '#', '&', '(', ')',
@@ -296,18 +320,19 @@ class DataBase {
     /*
       CAPITALIZE PALABRAS
      */
-    public static function capitalize($value, $allwords=false) {
-        if($allwords==true){
+    public static function capitalize($value, $allwords = false)
+    {
+        if ($allwords==true) {
             $textos_procesados = '';
             $textos = explode(' ', $value);
-            foreach ($textos as $palabras){
+            foreach ($textos as $palabras) {
                 $letter = substr($palabras, 0, 1);
                 $word = substr($palabras, 1);
                 $newWord = strtoupper($letter) . strtolower($word);
                 $textos_procesados .= ' '.$newWord;
             }
             return substr($textos_procesados, 1);
-        }else{
+        } else {
             $letter = substr($value, 0, 1);
             $word = substr($value, 1);
             $newWord = strtoupper($letter) . strtolower($word);
@@ -319,21 +344,24 @@ class DataBase {
     /*
      * QUITA TODOS LOS ESPACIOS DE UNA CADENA
      */
-    public static function trim($cadena) {
+    public static function trim($cadena)
+    {
         return str_replace(array(' ', '\''), '', $cadena);
     }
 
     /*
       CONVERTIR A MAYUSCULAS UNA PALABRA O UN TEXTO
      */
-    public static function mayuscula($cadena) {
+    public static function mayuscula($cadena)
+    {
         return strtoupper($cadena);
     }
 
     /*
       CONVERTIR A MINUSCULAS UNA PALABRA O UN TEXTO
      */
-    public static function minuscula($cadena) {
+    public static function minuscula($cadena)
+    {
         return strtolower($cadena);
-    }    
+    }
 }

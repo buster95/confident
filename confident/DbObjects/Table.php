@@ -821,20 +821,25 @@ class Table
         }
     }
 
-    public function delete($id)
+    public function delete($dataWhere)
     {
+        $consulta = "DELETE FROM ".$this->tabla. " WHERE ";
         if (is_numeric($id)) {
-            $consulta = "DELETE FROM ".$this->tabla;
-            $consulta .= " WHERE ".$this->KEY()."=".$id;
-            $resultado = $this->mydb->ejecutar($consulta);
+            $consulta .= $this->KEY()."=".$dataWhere;
             if ($resultado > 0) {
                 return true;
             } else {
                 return false;
             }
+        } elseif (is_array($id)) {
+            foreach ($dataWhere as $key => $value) {
+                $consulta .= $key."=".$value.",";
+            }
+            $consulta = substr($consulta, 0, strlen($consulta)-1);
         } else {
-            throw new Exception("DELETE RECIBE INT", 5);
+            throw new Exception("DELETE RECIBE INT or Array", 5);
         }
+        $resultado = $this->mydb->ejecutar($consulta);
     }
 
     /**
