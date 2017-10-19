@@ -3,7 +3,7 @@ namespace Confident;
 
 use mysqli;
 use Exception;
-use Confident\Utilities\JsonHelper as JsonConvert;
+use Confident\Utilities\JsonHelper;
 use Confident\DbObjects\Table;
 use Confident\DbObjects\View;
 use Confident\DbObjects\Procedure;
