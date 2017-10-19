@@ -823,7 +823,7 @@ class Table
 
     public function delete($dataWhere)
     {
-        $consulta = "DELETE FROM ".$this->tabla. " WHERE ";
+        $consulta = "DELETE FROM ".$this->tabla." WHERE ";
         if (is_numeric($dataWhere)) {
             $consulta .= $this->KEY()."=".$dataWhere;
             if ($resultado > 0) {
@@ -833,9 +833,9 @@ class Table
             }
         } elseif (is_array($dataWhere)) {
             foreach ($dataWhere as $key => $value) {
-                $consulta .= $key."=".$value.",";
+                $consulta .= $key."=".$value." and ";
             }
-            $consulta = substr($consulta, 0, strlen($consulta)-1);
+            $consulta = substr($consulta, 0, strlen($consulta)-5);
         } else {
             throw new Exception("DELETE RECIBE INT or Array", 5);
         }

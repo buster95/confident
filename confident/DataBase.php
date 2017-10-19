@@ -205,7 +205,14 @@ class DataBase
         $resultado = $conx->query($consulta);
         if ($conx->errno !==0) {
             http_response_code(400);
-            $resultado = array('message' => "Database Error Number:" . $conx->errno . " :: " . $conx->error);
+            $resultado = array(
+                'message' => "Database Error Number:" . $conx->errno . " :: " . $conx->error,
+                'status' => '500',
+                'isSuccess' => false
+            );
+            echo JsonHelper::Serialize($resultado);
+            $conx->close();
+            exit;
         }
         $conx->close();
         return $resultado;
@@ -215,6 +222,17 @@ class DataBase
     {
         $conx = $this->conectar();
         $conx->query($consulta);
+        if ($conx->errno !==0) {
+            http_response_code(400);
+            $resultado = array(
+                'message' => "Database Error Number:" . $conx->errno . " :: " . $conx->error,
+                'status' => '500',
+                'isSuccess' => false
+            );
+            echo JsonHelper::Serialize($resultado);
+            $conx->close();
+            exit;
+        }
         $affected_rows = $conx->affected_rows;
         $conx->close();
         return $affected_rows;
