@@ -806,13 +806,26 @@ class Table
                     throw new Exception("NO ES UN NOMBRE => ( " .$key. " ) PARA UNA COLUMNA", 3);
                 }
             }
+            $update = substr($update, 0, strlen($update) - 1);
         } else {
             throw new Exception("UPDATE RECIBE ARREGLO", 5);
         }
-        $consulta .= $update.' WHERE '.$this->KEY().'='.$id;
+
+        // CONSULTA WHERE
+        $consulta .= $update . ' WHERE ';
+        if (is_array($id)) {
+            foreach ($id as $key => $value) {
+                $ConsultaWhere .= $key."=".$value." and ";
+            }
+            $ConsultaWhere = substr($consulta, 0, strlen($consulta)-5);
+        } else {
+            $ConsultaWhere = $this->KEY().'='.$id;
+        }
+        $consulta .= $ConsultaWhere;
+
         $consulta = str_replace(array("', ","''"), "' ", $consulta);
         $consulta =  $this->SQL_FUNCTIONS($consulta);
-        $consulta = str_replace(", WHERE", ' WHERE', $consulta);
+        // $consulta = str_replace(", WHERE", ' WHERE', $consulta);
         $resultado = $this->mydb->ejecutar($consulta);
         if ($resultado>0) {
             return true;
