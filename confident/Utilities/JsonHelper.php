@@ -103,6 +103,8 @@ class JsonHelper
         if ((int)$status >= 200 && (int)$status < 300) {
             $success = true;
         }
+        
+        http_response_code($status);
         $json_message = array(
             'message' => $message,
             'status' => (int) $status,
