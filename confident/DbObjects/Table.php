@@ -812,12 +812,13 @@ class Table
         }
 
         // CONSULTA WHERE
-        $consulta .= $update . ' WHERE ';
+        $consulta .= $update . " WHERE ";
+        $ConsultaWhere = "";
         if (is_array($id)) {
             foreach ($id as $key => $value) {
                 $ConsultaWhere .= $key."=".$value." and ";
             }
-            $ConsultaWhere = substr($consulta, 0, strlen($consulta)-5);
+            $ConsultaWhere = substr($ConsultaWhere, 0, strlen($ConsultaWhere)-5);
         } else {
             $ConsultaWhere = $this->KEY().'='.$id;
         }
