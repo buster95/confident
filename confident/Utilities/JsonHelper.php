@@ -2,6 +2,8 @@
 
 namespace Confident\Utilities;
 
+use Exception;
+
 class JsonHelper
 {
     
@@ -89,5 +91,23 @@ class JsonHelper
     public static function Deserialize($json)
     {
         return json_decode($json, true);
+    }
+
+    public static function Message($message, $status = 200)
+    {
+        if (!is_numeric($status)) {
+            throw new Exception("Status code is not a number", 1);
+        }
+        
+        $success = false;
+        if ((int)$status >= 200 && (int)$status < 300) {
+            $success = true;
+        }
+        $json_message = array(
+            'message' => $message,
+            'status' => (int) $status,
+            'isSuccess' => $success
+        );
+        return self::Serialize($json_message);
     }
 }
