@@ -824,14 +824,14 @@ class Table
     public function delete($dataWhere)
     {
         $consulta = "DELETE FROM ".$this->tabla. " WHERE ";
-        if (is_numeric($id)) {
+        if (is_numeric($dataWhere)) {
             $consulta .= $this->KEY()."=".$dataWhere;
             if ($resultado > 0) {
                 return true;
             } else {
                 return false;
             }
-        } elseif (is_array($id)) {
+        } elseif (is_array($dataWhere)) {
             foreach ($dataWhere as $key => $value) {
                 $consulta .= $key."=".$value.",";
             }
