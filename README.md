@@ -5,19 +5,20 @@
 [![Total Downloads](https://poser.pugx.org/confident/confident/downloads)](https://packagist.org/packages/confident/confident)
 [![License](https://poser.pugx.org/confident/confident/license)](https://packagist.org/packages/confident/confident)
 
-Confident es un framework para crear API Rest con sencillez
+**Confident** is a framework that helps you to easily create your own RESTful API
 
-## Instalación
+## Installation
 
-Se recomienda usar [Composer](https://getcomposer.org/) para instalar confident.
+We recommend to install **Confident** using [Composer](https://getcomposer.org/).
 
 ```bash
 $ composer require confident/confident "^1.0"
 ```
 
-## Uso
+## Usage
 
-Crear un archivo index.php con el siguiente contenido:
+This example shows how easy it is to set up **Confident** in your project. <br>
+Try it yourself by pasting the code below into your index.php.
 
 ```php
 <?php
@@ -35,4 +36,4 @@ $app->start();
 
 ## License
 
-The Confident is licensed under the MIT license. See [License File](LICENSE.md) for more information.
+**Confident** is licensed under the MIT license. See [License File](LICENSE.md) for more information.
